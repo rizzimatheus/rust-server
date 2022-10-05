@@ -13,13 +13,8 @@ impl WebsiteHandler {
 
     fn read_file(&self, file_path: &str) -> Option<String> {
         let path = format!("{}/{}", self.public_path, file_path);
-        println!("public_path: {}", self.public_path);
-        println!("public_path: {}", file_path);
-        println!("path: {}", path);
-
-        match fs::canonicalize(path) {
+        match dunce::canonicalize(&path) {
             Ok(path) => {
-                println!("path2: {}", path.to_string_lossy());
                 if path.starts_with(&self.public_path) {
                     fs::read_to_string(path).ok()
                 } else {
